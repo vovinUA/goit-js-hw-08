@@ -4,7 +4,7 @@ const form = document.querySelector('.feedback-form');
 form.addEventListener('input', throttle(onFormData, 500));
 form.addEventListener('submit', onSubmitForm);
 
-const formData = {};
+let formData = {};
 
 function onFormData(event) {
   formData[event.target.name] = event.target.value;
@@ -16,14 +16,16 @@ function onSubmitForm(event) {
   event.preventDefault();
   event.currentTarget.reset();
   localStorage.removeItem('feedback-form-state');
+  formData = {};
 }
 
 (function dataFromLocalStorage() {
   const data = JSON.parse(localStorage.getItem('feedback-form-state'));
-  const email = document.querySelector('.feedback-form input');
-  const message = document.querySelector('.feedback-form textarea');
+  const email = document.querySelector('.feedback-form input[name="email"]');
+  const message = document.querySelector('.feedback-form textarea[name="message"]');
   if (data) {
-    email.value = data.email;
-    message.value = data.message;
+    formData = data;
+    email.value = formData.email || '';
+    message.value = formData.message || '';
   }
 })();
