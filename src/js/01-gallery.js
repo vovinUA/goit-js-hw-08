@@ -6,21 +6,20 @@ import { galleryItems } from './gallery-items.js';
 
 console.log(galleryItems);
 
-const gallery = document.querySelector('.gallery');
+const imagesList = galleryItems
+  .map(({ preview, original, description }) => {
+    return `<div class="gallery"><a class="gallery__item" href="${original}">
+    <img class="gallery__image" src="${preview}" alt="${description}" />
+  </a></div>`;
+  })
+  .join(' ');
 
-let items = '';
+const galleryWrapper = document.querySelector('.gallery');
 
-for (const { original, preview, description } of galleryItems) {
-  items += `<div calss="gallery__item"><a class="gallery__link" href="${original}"><img class="gallery__image" src="${preview}" alt="${description}"></a></div>`;
-}
+galleryWrapper.innerHTML = imagesList;
 
-gallery.insertAdjacentHTML('afterbegin', items);
-
-var lightbox = new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionSelector: 'img',
-  captionType: 'attr',
-  captionsData: 'alt',
+const lightbox = new SimpleLightbox('.gallery a', {
   captionPosition: 'bottom',
   captionDelay: 250,
+  captionsData: 'alt',
 });
